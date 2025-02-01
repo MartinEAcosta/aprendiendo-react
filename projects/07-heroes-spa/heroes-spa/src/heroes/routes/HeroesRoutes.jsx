@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { MarvelPage, DcPage , SearchPage , HeroPage } from "../pages";
+import { PublisherPage, SearchPage , HeroPage } from "../pages";
 import { Navbar } from "../../ui";
 
 export const HeroesRoutes = () => {
@@ -9,8 +9,8 @@ export const HeroesRoutes = () => {
 
       <div className="container">
         <Routes>
-          <Route path="marvel" element={<MarvelPage />} />
-          <Route path="dc" element={<DcPage />} />
+          <Route path="marvel" element={<PublisherPage publisher={'Marvel Comics'}  />} />
+          <Route path="dc" element={<PublisherPage publisher={'DC Comics'} />} />
           
           <Route path="search" element={<SearchPage />} />
           <Route path="hero" element={<HeroPage />} />
