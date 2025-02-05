@@ -1,32 +1,21 @@
-import { useLocation, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 
-import { useForm } from "../../hooks";
+import { useForm , useSearcher } from "../../hooks";
+import { useLocation } from "react-router-dom";
 import { HeroCard } from "../components";
 import { getHeroesByName } from "../helpers/getHeroesByName";
 
 export const SearchPage = () => {
-  const navigate = useNavigate();
   const location = useLocation();
-
-  const { q = "" } = queryString.parse(location.search);
+  const { q = '' } = queryString.parse(location.search);
 
   const heroes = getHeroesByName(q);
 
-  const showSearch = (q.length === 0);
-  const showError = (q.length > 0) && heroes.length === 0;
+  const { showSearch , showError , onSearchSumbit } = useSearcher( q , heroes );
 
-  const { searchText, onInputChange, onResetForm } = useForm({
+  const { searchText, onInputChange } = useForm({
     searchText: q,
   });
-
-  const onSearchSumbit = (event) => {
-    event.preventDefault();
-
-    // if (searchText.trim().length <= 1) return;
-
-    navigate(`?q=${searchText}`);
-  };
 
   return (
     <>
@@ -38,7 +27,7 @@ export const SearchPage = () => {
           <h4>Searching</h4>
           <hr />
 
-          <form onSubmit={onSearchSumbit}>
+          <form onSubmit={(event) => onSearchSumbit( event, searchText)}>
             <input
               type="text"
               placeholder="Search a hero"
@@ -62,7 +51,7 @@ export const SearchPage = () => {
             : ( heroes.length === 0) 
             && <div className="alert alert-danger"> No hero with <b> { q } </b> </div>
           } */}
-
+          {/* 
           <div className="alert alert-primary animate__animated animate__fadeIn" 
               style={{display : showSearch ? '' : 'none'}}> 
             Search a hero 
@@ -71,7 +60,25 @@ export const SearchPage = () => {
           <div className="alert alert-danger animate__animated animate__fadeIn" 
               style={{display : showError ? '' : 'none'}}> 
             No hero with <b> { q } </b> 
-          </div>
+          </div> */}
+
+          {showSearch && (
+            <div
+              className="alert alert-primary animate__animated animate__fadeIn"
+              style={{ display: showSearch ? "" : "none" }}
+            >
+              Search a hero
+            </div>
+          )}
+
+          {showError && (
+            <div
+              className="alert alert-danger animate__animated animate__fadeIn"
+              style={{ display: showError ? "" : "none" }}
+            >
+              No hero with <b> { q } </b>
+            </div>
+          )}
 
           {heroes.map((hero) => (
             <HeroCard key={hero.id} {...hero} />
