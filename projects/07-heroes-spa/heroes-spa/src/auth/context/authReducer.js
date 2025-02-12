@@ -1,8 +1,8 @@
 import { types } from '../types/types'
 
-
-
 export const authReducer = ( state = {} , action ) => {
+
+//  NO SE DEBE LLAMAR LOCALSTORAGE ACA. MALA PRACTICA
 
     switch ( action.type ){
 
