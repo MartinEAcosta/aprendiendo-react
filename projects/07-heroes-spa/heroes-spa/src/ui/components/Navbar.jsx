@@ -16,7 +16,6 @@ export const Navbar = () => {
         });
     }
 
-    console.log(user);
 
     return (
         <nav className="navbar navbar-expand-sm navbar-dark bg-dark p-2">
