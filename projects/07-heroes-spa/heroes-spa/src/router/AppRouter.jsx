@@ -2,9 +2,11 @@ import { Route, Routes } from "react-router-dom"
 
 
 import { LoginPage } from "../auth"
-import { HeroesRoutes } from "../heroes/"
+import { HeroesRoutes , PrivateRoute } from "../heroes/"
 
 export const AppRouter = () => {
+
+    
     return (
         <>
 
@@ -14,9 +16,13 @@ export const AppRouter = () => {
                     path="login" 
                     element={ <LoginPage /> } />
        
-                <Route 
-                    path="/*" 
-                    element={ <HeroesRoutes /> } />
+                <Route
+                    path="/*" element={ 
+                        <PrivateRoute >
+                            <HeroesRoutes />
+                        </PrivateRoute > 
+                    } 
+                /> 
        
             </Routes>
         </>
