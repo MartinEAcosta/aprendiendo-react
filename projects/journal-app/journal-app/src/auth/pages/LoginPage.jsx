@@ -6,12 +6,14 @@ import { Link, Grid, Typography, TextField , Button} from "@mui/material"
 import { AuthLayout } from '../layout/AuthLayout';
 import { useForm } from '../../hooks/useForm';
 import { checkingAuthentication, startGoogleSignIn } from '../../store';
-import { checkingCredentials } from '../../store/auth';
+import { useMemo } from 'react';
 
 export const LoginPage = () => {
 
   const { status , uid } = useSelector( ( state ) => state.auth );
   const dispatch = useDispatch();
+
+  const isAuthenticating = useMemo( () => status === 'checking' , [ status ]);
 
 
   const { email, password , onInputChange } = useForm({
@@ -64,13 +66,16 @@ export const LoginPage = () => {
 
             <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
               <Grid item xs={12} sm={6}>
-                <Button variant="contained" fullWidth>
+                <Button 
+                  disabled={ isAuthenticating }
+                  variant="contained" fullWidth>
                   Login
                 </Button>
               </Grid>
 
               <Grid item xs={12} sm={6}>
                 <Button 
+                  disabled={ isAuthenticating }
                   type='sumbit' 
                   variant="contained" 
                   fullWidth 
