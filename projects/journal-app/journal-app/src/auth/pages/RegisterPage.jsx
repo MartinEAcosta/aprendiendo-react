@@ -4,11 +4,12 @@ import { Google } from "@mui/icons-material";
 import { Link, Grid, Typography, TextField , Button} from "@mui/material"
 import { AuthLayout } from '../layout/AuthLayout';
 import { useForm } from '../../hooks/useForm';
+import { useState } from 'react';
 
 const formData = {
-  email : 'acostta@google.com',
-  password : 'algundia',
-  displayName : 'jrdev',
+  email : '',
+  password : '',
+  displayName : '',
 }
 
 const formValidations = {
@@ -19,15 +20,20 @@ const formValidations = {
 
 export const RegisterPage = () => {
 
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
   const { 
     email, password , displayName , 
-    onInputChange , formState ,
+    onInputChange ,
     isFormValid , displayNameValid, emailValid, passwordValid
   } = useForm(formData , formValidations);
 
   const onSubmit = ( event ) => {
     event.preventDefault();
-    console.log( formState );
+    setFormSubmitted(true);
+    if(isFormValid){
+      console.log(isFormValid);
+    }
   }
 
     return (
@@ -45,7 +51,7 @@ export const RegisterPage = () => {
                 placeholder="Martin Acosta"
                 fullWidth
                 required
-                error= { !displayNameValid }
+                error= { displayNameValid && formSubmitted}
                 helperText={ displayNameValid }
               />
             </Grid>
@@ -60,7 +66,8 @@ export const RegisterPage = () => {
                 placeholder="example@google.com"
                 fullWidth
                 required
-
+                error= { emailValid && formSubmitted}
+                helperText= { emailValid }
               />
             </Grid>
 
@@ -74,6 +81,8 @@ export const RegisterPage = () => {
                 placeholder="Contraseña"
                 fullWidth
                 required
+                error= { passwordValid && formSubmitted }
+                helperText= { passwordValid }
               />
             </Grid>
 
