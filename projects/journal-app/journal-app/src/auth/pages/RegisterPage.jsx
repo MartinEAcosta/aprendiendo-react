@@ -11,9 +11,19 @@ const formData = {
   displayName : 'jrdev',
 }
 
+const formValidations = {
+  email: [ (value) => value.includes('@') , 'El correo debe contener un "@".'],
+  password: [ (value) => value.length >= 6 , 'El password debe contener al menos 6 caracteres.'],
+  displayName: [ (value) => value.length >= 1, 'El nombre es obligatorio.']
+}
+
 export const RegisterPage = () => {
 
-  const { email, password , displayName , onInputChange , formState } = useForm(formData);
+  const { 
+    email, password , displayName , 
+    onInputChange , formState ,
+    isFormValid , displayNameValid, emailValid, passwordValid
+  } = useForm(formData , formValidations);
 
   const onSubmit = ( event ) => {
     event.preventDefault();
@@ -35,6 +45,8 @@ export const RegisterPage = () => {
                 placeholder="Martin Acosta"
                 fullWidth
                 required
+                error= { !displayNameValid }
+                helperText={ displayNameValid }
               />
             </Grid>
 
@@ -48,6 +60,7 @@ export const RegisterPage = () => {
                 placeholder="example@google.com"
                 fullWidth
                 required
+
               />
             </Grid>
 
