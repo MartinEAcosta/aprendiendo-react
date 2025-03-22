@@ -5,6 +5,8 @@ import { Link, Grid, Typography, TextField , Button} from "@mui/material"
 import { AuthLayout } from '../layout/AuthLayout';
 import { useForm } from '../../hooks/useForm';
 import { useState } from 'react';
+import { startCreatingUserWithEmailPassword } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
 
 const formData = {
   email : '',
@@ -20,20 +22,24 @@ const formValidations = {
 
 export const RegisterPage = () => {
 
+  const { } = useSelector( (state) => state.auth );
+  const dispatch = useDispatch();
+
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const { 
     email, password , displayName , 
-    onInputChange ,
+    onInputChange , formState,
     isFormValid , displayNameValid, emailValid, passwordValid
   } = useForm(formData , formValidations);
 
   const onSubmit = ( event ) => {
     event.preventDefault();
     setFormSubmitted(true);
-    if(isFormValid){
-      console.log(isFormValid);
-    }
+
+    if( !isFormValid ) return;
+
+    dispatch( startCreatingUserWithEmailPassword( formState ) );
   }
 
     return (
@@ -88,7 +94,10 @@ export const RegisterPage = () => {
 
             <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
               <Grid item xs={12} >
-                <Button variant="contained" fullWidth type='submit'>
+                <Button 
+                  variant="contained" fullWidth type='submit'
+                  onClick={ onSubmit }
+                >
                   Crear cuenta
                 </Button>
               </Grid>
