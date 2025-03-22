@@ -5,12 +5,12 @@ import { Link, Grid, Typography, TextField , Button} from "@mui/material"
 
 import { AuthLayout } from '../layout/AuthLayout';
 import { useForm } from '../../hooks/useForm';
-import { checkingAuthentication, startGoogleSignIn } from '../../store';
+import { checkingAuthentication, startGoogleSignIn, startSignInWithEmailPassword } from '../../store';
 import { useMemo } from 'react';
 
 export const LoginPage = () => {
 
-  const { status , uid } = useSelector( ( state ) => state.auth );
+  const { status } = useSelector( ( state ) => state.auth );
   const dispatch = useDispatch();
 
   const isAuthenticating = useMemo( () => status === 'checking' , [ status ]);
@@ -20,20 +20,19 @@ export const LoginPage = () => {
     email : 'martin@gmail.com',
     password : '123456',
 
-  });
+  })
 
   const onSumbit = ( e ) => {
     e.preventDefault();
 
-    console.log( email , password , status , uid);
-
     dispatch( checkingAuthentication() );
+
+    dispatch( startSignInWithEmailPassword( { email , password } ) );
   }
 
   const onGoogleSignIn = () => {
     dispatch( startGoogleSignIn() );
     console.log('On google sign in');
-
   }
 
     return (
@@ -79,7 +78,7 @@ export const LoginPage = () => {
                   type='sumbit' 
                   variant="contained" 
                   fullWidth 
-                  onClick={ onGoogleSignIn }>
+                >
                   <Google />
                   <Typography sx={{ ml: 1 }}>Google</Typography>
                 </Button>

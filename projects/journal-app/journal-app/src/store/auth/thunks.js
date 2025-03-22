@@ -1,14 +1,16 @@
 import { checkingCredentials, login, logout } from "."
-import { checkingIfAccountExists, registerUserWithEmailPassword, signInWithGoogle } from "../../firebase/providers";
+import { registerUserWithEmailPassword, signInWithEmailPassword, signInWithGoogle } from "../../firebase/providers";
 
 export const checkingAuthentication = ( email , password ) => {
     return async( dispatch ) => {
 
         dispatch( checkingCredentials() );
 
-        const res = await checkingIfAccountExists( email );
+        // const res = await checkingIfAccountExists( email );
         
-        if( res.ok ) return dispatch( logout() );
+        // console.log(res);
+
+        // if( res.ok ) return dispatch( logout() );
     }
 }
 
@@ -30,8 +32,26 @@ export const startCreatingUserWithEmailPassword = ( { email , password , display
 
         dispatch( checkingAuthentication() );
         
-        const resp = await registerUserWithEmailPassword( { email , password , displayName} );
+        const { ok , uid , photoURL, errorMessage } = await registerUserWithEmailPassword( { email , password , displayName} );
+
+        if( !ok ) return dispatch( logout( errorMessage ) );
+
+        return dispatch( login( { uid , displayName , email , photoURL} ) );
         
-        console.log(resp);
+    }
+}
+
+export const startSignInWithEmailPassword = ( { email , password } ) => {
+    return async( dispatch ) => {
+
+        dispatch( checkingAuthentication() );
+
+        const { ok , displayName , uid , photoURL , errorMessage } = await signInWithEmailPassword( { email , password } );
+
+        console.log( ok , displayName , uid , photoURL , errorMessage );
+
+        if( !ok ) return dispatch( logout( errorMessage ) );
+
+        return dispatch( login( { uid, displayName , email , photoURL } ) );
     }
 }

@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
 import { FirebaseAuth } from "./config";
 
 const googleProvider = new GoogleAuthProvider();
@@ -17,7 +17,6 @@ export const signInWithGoogle = async( ) => {
         }
     }
     catch (error) {
-
         return {
             ok: false,
             errorCode: error.code,
@@ -29,17 +28,20 @@ export const signInWithGoogle = async( ) => {
 export const registerUserWithEmailPassword = async( { email , password, displayName } ) => {
     try{
 
-        const newAccount = await createUserWithEmailAndPassword( FirebaseAuth , email ,password );
+        const result = await createUserWithEmailAndPassword( FirebaseAuth , email ,password );
 
-        console.log(newAccount);
+        const { uid , photoURL } = result.user;
+
+        await updateProfile( FirebaseAuth.currentUser , { displayName });
 
         return{
             ok: true,
             email,
             password,
             displayName,
+            uid,
+            photoURL,
         }
-
     }
     catch(error){
         return {
@@ -50,14 +52,41 @@ export const registerUserWithEmailPassword = async( { email , password, displayN
     }
 }
 
-export const checkingIfAccountExists = async( email ) => {
+// export const checkingIfAccountExists = async( email ) => {
+//     try{
+//         // const res = await fetchSignInMethodsForEmail( FirebaseAuth , email );
+
+//         // if( res.length === 0 ) return {
+//         //     ok: false,
+//         // };
+
+//         // return {
+//         //     ok: true,
+//         // }
+//     }
+//     catch(error){
+//         return{
+//             ok: false,
+//             errorCode: error.code,
+//             errorMessage: error.message,
+//         }
+//     }
+// }
+
+export const signInWithEmailPassword = async( { email , password } ) => {
     try{
-        const res = await fetchSignInMethodsForEmail( FirebaseAuth , email );
 
-        if(!res.ok) return;
+        const result = await signInWithEmailAndPassword( FirebaseAuth , email , password );
 
-        return {
+        const { displayName , uid , photoURL } = result.user;
+
+        return{
             ok: true,
+            email,
+            password,
+            displayName,
+            uid,
+            photoURL,
         }
     }
     catch(error){
@@ -67,4 +96,5 @@ export const checkingIfAccountExists = async( email ) => {
             errorMessage: error.message,
         }
     }
+
 }
