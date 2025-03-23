@@ -10,7 +10,7 @@ import { useMemo } from 'react';
 
 export const LoginPage = () => {
 
-  const { status } = useSelector( ( state ) => state.auth );
+  const { status , errorMessage } = useSelector( ( state ) => state.auth );
   const dispatch = useDispatch();
 
   const isAuthenticating = useMemo( () => status === 'checking' , [ status ]);
@@ -66,6 +66,7 @@ export const LoginPage = () => {
             <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
               <Grid item xs={12} sm={6}>
                 <Button 
+                  type='sumbit'
                   disabled={ isAuthenticating }
                   variant="contained" fullWidth>
                   Login
@@ -75,7 +76,7 @@ export const LoginPage = () => {
               <Grid item xs={12} sm={6}>
                 <Button 
                   disabled={ isAuthenticating }
-                  type='sumbit' 
+                  onClick={ onGoogleSignIn }
                   variant="contained" 
                   fullWidth 
                 >

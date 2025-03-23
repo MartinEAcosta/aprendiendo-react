@@ -46,9 +46,9 @@ export const startSignInWithEmailPassword = ( { email , password } ) => {
 
         dispatch( checkingAuthentication() );
 
-        const { ok , displayName , uid , photoURL , errorMessage } = await signInWithEmailPassword( { email , password } );
+        const { ok , displayName , uid , photoURL , errorMessage , errorCode} = await signInWithEmailPassword( { email , password } );
 
-        console.log( ok , displayName , uid , photoURL , errorMessage );
+        console.log( ok , displayName , uid , photoURL , errorMessage, errorCode );
 
         if( !ok ) return dispatch( logout( errorMessage ) );
 
