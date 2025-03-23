@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import { Google } from "@mui/icons-material";
-import { Link, Grid, Typography, TextField , Button} from "@mui/material"
+import { Link, Grid, Typography, TextField , Button, Alert} from "@mui/material"
 
 import { AuthLayout } from '../layout/AuthLayout';
 import { useForm } from '../../hooks/useForm';
@@ -63,6 +63,15 @@ export const LoginPage = () => {
               />
             </Grid>
 
+            <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
+              <Grid 
+                item 
+                xs={12} 
+                display={ !!errorMessage ? '' : 'none' }
+                >  
+                <Alert severity='error'>{ errorMessage }</Alert>
+              </Grid>
+            </Grid>
             <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
               <Grid item xs={12} sm={6}>
                 <Button 
