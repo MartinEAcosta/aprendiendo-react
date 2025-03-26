@@ -40,15 +40,3 @@ export const startLoadingNotes = () => {
         dispatch( setNotes( res ) );
     }
 }
-
-export const selectNote = ( id ) => {
-    return async( dispatch , getState ) => {
-
-        const { uid } = getState().auth;
-
-        const res = doc( FirebaseDB , `${ uid }/journal/notes/${ id }`);
-        const note = await getDoc( res );
-        console.log(note.data());
-        dispatch( setActiveNote( note.data() ) );
-    }
-}

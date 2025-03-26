@@ -1,11 +1,13 @@
+import { useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import { TurnedInNot } from "@mui/icons-material";
 import { Grid, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { useMemo } from "react";
-import { selectNote } from "../../store/journal/thunks";
-import { useDispatch } from "react-redux";
+import { setActiveNote } from "../../store/journal/journalSlice";
 
-export const SideBarItem = ( { id , title , body } ) => {
+export const SideBarItem = ( { id , title , body , imageUrls = [] } ) => {
 
+    const { active } = useSelector( (state) => state.journal );
     const dispatch = useDispatch();
 
     const newTitle = useMemo( () => {
@@ -17,14 +19,18 @@ export const SideBarItem = ( { id , title , body } ) => {
     }, [ title ]);
 
     const onSelectNote = ( ) => {
-        dispatch( selectNote( id ) );
+        dispatch( setActiveNote( { id , title , body , imageUrls } ) );
     }
 
 
 
   return (
     <>
-      <ListItem onClick={ onSelectNote } key={ id } disablePadding>
+      <ListItem 
+        onClick={ onSelectNote } 
+        key={ id } disablePadding
+        selected={ active?.id  == id } 
+        >
         <ListItemButton>
           <ListItemIcon>
             <TurnedInNot />
@@ -32,7 +38,6 @@ export const SideBarItem = ( { id , title , body } ) => {
           <Grid container>
             <ListItemText primary={ newTitle } />
             <ListItemText 
-                
                 secondary={ body } />
           </Grid>
         </ListItemButton>
