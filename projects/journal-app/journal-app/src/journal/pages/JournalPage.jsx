@@ -27,7 +27,7 @@ export const JournalPage = () => {
                 {
                 (!!active) 
                 ?
-                <NoteView />
+                <NoteView {...active} />
                 :
                 <NothingSelectedView />
                 }
