@@ -12,7 +12,7 @@ export const JournalPage = () => {
     const dispatch = useDispatch();
 
     const isSavingNewNote = useMemo( () => isSaving === true , [isSaving] );
-
+    
     const onClickNewNote = ( e ) => {
         e.preventDefault();
 
@@ -27,7 +27,7 @@ export const JournalPage = () => {
                 {
                 (!!active) 
                 ?
-                <NoteView {...active} />
+                <NoteView />
                 :
                 <NothingSelectedView />
                 }

@@ -5,7 +5,7 @@ import { TurnedInNot } from "@mui/icons-material";
 import { Grid, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { setActiveNote } from "../../store/journal/journalSlice";
 
-export const SideBarItem = ( { id , title , body , imageUrls = [] } ) => {
+export const SideBarItem = ( { id , title , body , imageUrls = [] , date } ) => {
 
     const { active } = useSelector( (state) => state.journal );
     const dispatch = useDispatch();
@@ -19,7 +19,7 @@ export const SideBarItem = ( { id , title , body , imageUrls = [] } ) => {
     }, [ title ]);
 
     const onSelectNote = ( ) => {
-        dispatch( setActiveNote( { id , title , body , imageUrls } ) );
+        dispatch( setActiveNote( { id , title , body , imageUrls , date } ) );
     }
 
 

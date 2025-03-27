@@ -8,6 +8,11 @@ import { useForm } from '../../hooks/useForm';
 import { checkingAuthentication, startGoogleSignIn, startSignInWithEmailPassword } from '../../store';
 import { useMemo } from 'react';
 
+const formData = {
+  email : 'martin@gmail.com',
+  password : '123456',
+}
+
 export const LoginPage = () => {
 
   const { status , errorMessage } = useSelector( ( state ) => state.auth );
@@ -17,9 +22,7 @@ export const LoginPage = () => {
 
 
   const { email, password , onInputChange } = useForm({
-    email : 'martin@gmail.com',
-    password : '123456',
-
+    formData
   })
 
   const onSumbit = ( e ) => {
