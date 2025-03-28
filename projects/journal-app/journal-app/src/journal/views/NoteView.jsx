@@ -1,10 +1,11 @@
-import { SaveOutlined } from "@mui/icons-material";
+import { useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Grid, TextField, Typography } from "@mui/material";
+import { SaveOutlined } from "@mui/icons-material";
+
+import { setActiveNote, startUpdatingNote } from "../../store";
 import { ImageGallery } from "../components";
 import { useForm } from "../../hooks/useForm";
-import { useDispatch, useSelector } from "react-redux";
-import { updatingNote } from "../../store";
-import { useMemo } from "react";
 
 export const NoteView = ( ) => {
 
@@ -17,8 +18,13 @@ export const NoteView = ( ) => {
         return newDate.toUTCString();
     }, [ date ])
 
+    useEffect(() => {
+        dispatch( setActiveNote( formState ) );
+    }, [ formState ]);
+    
+
     const onUpdateNote = (  ) => {
-        dispatch( updatingNote(  {id , title , body , date , imageUrls}  ) );
+        dispatch( startUpdatingNote( ) );
     }
 
     return (
