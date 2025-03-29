@@ -21,9 +21,9 @@ export const LoginPage = () => {
   const isAuthenticating = useMemo( () => status === 'checking' , [ status ]);
 
 
-  const { email, password , onInputChange } = useForm({
+  const { email, password , onInputChange } = useForm(
     formData
-  })
+  )
 
   const onSumbit = ( e ) => {
     e.preventDefault();
