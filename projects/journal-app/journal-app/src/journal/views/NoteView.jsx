@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Grid, IconButton, TextField, Typography } from "@mui/material";
-import { SaveOutlined, UploadFileOutlined } from "@mui/icons-material";
+import { DeleteOutline, SaveOutlined, UploadFileOutlined } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import 'sweetalert2/dist/sweetalert2.css';
 
-import { setActiveNote, startUpdatingNote, startUploadingFiles } from "../../store";
+import { setActiveNote, startDeletingNote, startUpdatingNote, startUploadingFiles } from "../../store";
 import { ImageGallery } from "../components";
 import { useForm } from "../../hooks/useForm";
 
@@ -41,6 +41,10 @@ export const NoteView = ( ) => {
         if( target.files === 0 ) return;
 
         dispatch( startUploadingFiles( target.files ) );
+    }
+
+    const onDelete = ( ) => {
+        dispatch( startDeletingNote() );
     }
 
     return (
@@ -101,6 +105,18 @@ export const NoteView = ( ) => {
                     placeholder="¿Que sucedio en el dia de hoy?"
                     minRows={ 5 }
                 />
+
+            </Grid>
+
+            <Grid container
+                justifyContent='end'>
+                    <Button
+                        onClick={ onDelete }
+                        sx={{ mt:2 }}
+                        color="error"    
+                    >
+                        <DeleteOutline />
+                    </Button>
 
             </Grid>
 
