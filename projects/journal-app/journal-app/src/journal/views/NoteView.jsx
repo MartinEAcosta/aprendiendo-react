@@ -5,7 +5,7 @@ import { SaveOutlined, UploadFileOutlined } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import 'sweetalert2/dist/sweetalert2.css';
 
-import { setActiveNote, startUpdatingNote } from "../../store";
+import { setActiveNote, startUpdatingNote, startUploadingFiles } from "../../store";
 import { ImageGallery } from "../components";
 import { useForm } from "../../hooks/useForm";
 
@@ -40,7 +40,7 @@ export const NoteView = ( ) => {
     const onFileInputChange = ( { target } ) => {
         if( target.files === 0 ) return;
 
-        // dispatch( startUploadingFiles( target.files ) );
+        dispatch( startUploadingFiles( target.files ) );
     }
 
     return (
