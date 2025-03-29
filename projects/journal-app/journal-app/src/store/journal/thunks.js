@@ -60,7 +60,7 @@ export const startUpdatingNote = (  ) => {
 }
 
 export const startUploadingFiles = ( files = [ ] ) => {
-    return async( dispatch , getState ) => {
+    return async( dispatch ) => {
 
         dispatch( setSaving() );
 
