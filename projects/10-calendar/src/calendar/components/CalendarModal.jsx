@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { addHours } from "date-fns";
+import { addHours, differenceInSeconds } from "date-fns";
 
 import Modal from "react-modal";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale ,  } from "react-datepicker";
+import es from 'date-fns/locale/es';
 
 import "react-datepicker/dist/react-datepicker.css";
+
+registerLocale('es', es);
 
 const customStyles = {
   content: {
@@ -23,7 +26,7 @@ export const CalendarModal = () => {
 
   const [isOpen, setIsOpen] = useState(true);
 
-  const [formValue, setFormValue] = useState({
+  const [formValues, setFormValues] = useState({
     title: 'Martin',
     notes: 'Acosta',
     start: new Date(),
@@ -36,17 +39,32 @@ export const CalendarModal = () => {
   };
 
   const onInputChange = ( { target } ) => {
-    setFormValue({
-        ...formValue,
+    setFormValues({
+        ...formValues,
         [target.name]: target.value
     })  
   }
 
   const onDateChange = ( event , changing ) => {
-    setFormValue({
-        ...formValue,
+    setFormValues({
+        ...formValues,
         [changing]: event,
     })
+  }
+
+  const onSumbit = ( event ) => {
+    event.preventDefault();
+
+    const diff = differenceInSeconds( formValues.end, formValues.start);
+
+    if( diff <= 0 || isNaN( diff ) ) return {...formValues,
+                                                errorMessage: 'Error en fechas.'
+                                            };
+
+    if( formValues.title.length <= 0 ) return console.log('Error en titulo');
+
+    console.log(formValues);
+
   }
 
   return (
@@ -61,27 +79,35 @@ export const CalendarModal = () => {
     >
       <h1> Nuevo evento </h1>
       <hr />
-      <form className="container">
+      <form className="container" onSumbit={ onSumbit }>
         <div className="form-group mb-2">
           <label>Fecha y hora inicio</label>
+          <br />
           <DatePicker 
-            minDate={ formValue.start }
-            selected={ formValue.start }
+            minDate={ formValues.start }
+            selected={ formValues.start }
             onChange={ (event) => onDateChange(event , 'start' ) }
             className="form-control"
             dateFormat="Pp"
+            showTimeSelect
+            locale='es'
+            timeCaption="Hora"
+
             />
         </div>
 
         <div className="form-group mb-2">
           <label>Fecha y hora fin</label>
+          <br />
           <DatePicker 
-            selected={ formValue.end }
+            selected={ formValues.end }
             onChange={ (event) => onDateChange(event , 'end' ) }
             className="form-control"
             dateFormat="Pp"
-            minDate={ formValue.start }
-
+            minDate={ formValues.start }
+            showTimeSelect
+            locale='es'
+            timeCaption="Hora"
             />
         </div>
 
@@ -93,7 +119,7 @@ export const CalendarModal = () => {
             className="form-control"
             placeholder="Título del evento"
             name="title"
-            value={ formValue.title }
+            value={ formValues.title }
             autoComplete="off"
             onChange={ onInputChange }
           />
@@ -109,7 +135,7 @@ export const CalendarModal = () => {
             placeholder="Notas"
             rows="5"
             name="notes"
-            value={ formValue.notes }
+            value={ formValues.notes }
             onChange={ onInputChange }
           ></textarea>
           <small id="emailHelp" className="form-text text-muted">
