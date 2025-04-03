@@ -79,7 +79,7 @@ export const CalendarModal = () => {
     >
       <h1> Nuevo evento </h1>
       <hr />
-      <form className="container" onSumbit={ onSumbit }>
+      <form className="container" onSubmit={ onSumbit }>
         <div className="form-group mb-2">
           <label>Fecha y hora inicio</label>
           <br />
