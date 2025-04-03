@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { addHours, differenceInSeconds } from "date-fns";
 
 import Modal from "react-modal";
@@ -27,53 +27,59 @@ const customStyles = {
 Modal.setAppElement("#root");
 
 export const CalendarModal = () => {
-
   const [isOpen, setIsOpen] = useState(true);
+  const [formSumbitted, setFormSumbitted] = useState(false);
 
   const [formValues, setFormValues] = useState({
-    title: 'Martin',
-    notes: 'Acosta',
+    title: "Martin",
+    notes: "Acosta",
     start: new Date(),
     end: addHours(new Date(), 2),
   });
+
+  const titleClass = useMemo(() => {
+    if( !formSumbitted ) return '';
+
+    return (formValues.title.length > 0) ? '' : 'is-invalid';
+  }, [formSumbitted , formValues.title ]);
+
+
+  const onInputChange = ({ target }) => {
+    setFormValues({
+      ...formValues,
+      [target.name]: target.value,
+    });
+  };
 
   const onCloseModal = () => {
     console.log("cerrando modal");
     setIsOpen(false);
   };
 
-  const onInputChange = ( { target } ) => {
+  const onDateChange = (event, changing) => {
     setFormValues({
-        ...formValues,
-        [target.name]: target.value
-    })  
-  }
+      ...formValues,
+      [changing]: event,
+    });
+  };
 
-  const onDateChange = ( event , changing ) => {
-    setFormValues({
-        ...formValues,
-        [changing]: event,
-    })
-  }
-
-  const onSubmit = ( event ) => {
+  const onSubmit = (event) => {
     event.preventDefault();
+    setFormSumbitted(true);
 
-    const diff = differenceInSeconds( formValues.end, formValues.start);
+    const diff = differenceInSeconds(formValues.end, formValues.start);
 
-    if( diff <= 0 || isNaN( diff ) ) {
-        Swal.fire('Fechas incorrectas','Revisar las fechas ingresadas' , 'error');
-        return;
+    if (diff <= 0 || isNaN(diff)) {
+      Swal.fire("Fechas incorrectas", "Revisar las fechas ingresadas", "error");
+      return;
     }
 
-    if( formValues.title.length <= 0 ) {
-        Swal.fire('Titulo incorrecto','El titulo debe contener al menos un caracter', 'error');
-        return;
+    if (formValues.title.length <= 0) {
+      return;
     }
 
     console.log(formValues);
-
-  }
+  };
 
   return (
     <Modal
@@ -87,36 +93,35 @@ export const CalendarModal = () => {
     >
       <h1> Nuevo evento </h1>
       <hr />
-      <form className="container" onSubmit={ onSubmit }>
+      <form className="container" onSubmit={onSubmit}>
         <div className="form-group mb-2">
           <label>Fecha y hora inicio</label>
           <br />
-          <DatePicker 
-            minDate={ formValues.start }
-            selected={ formValues.start }
-            onChange={ (event) => onDateChange(event , 'start' ) }
+          <DatePicker
+            minDate={formValues.start}
+            selected={formValues.start}
+            onChange={(event) => onDateChange(event, "start")}
             className="form-control"
             dateFormat="Pp"
             showTimeSelect
-            locale='es'
+            locale="es"
             timeCaption="Hora"
-
-            />
+          />
         </div>
 
         <div className="form-group mb-2">
           <label>Fecha y hora fin</label>
           <br />
-          <DatePicker 
-            selected={ formValues.end }
-            onChange={ (event) => onDateChange(event , 'end' ) }
+          <DatePicker
+            selected={formValues.end}
+            onChange={(event) => onDateChange(event, "end")}
             className="form-control"
             dateFormat="Pp"
-            minDate={ formValues.start }
+            minDate={formValues.start}
             showTimeSelect
-            locale='es'
+            locale="es"
             timeCaption="Hora"
-            />
+          />
         </div>
 
         <hr />
@@ -124,12 +129,12 @@ export const CalendarModal = () => {
           <label>Titulo y notas</label>
           <input
             type="text"
-            className="form-control"
+            className={`form-control ${titleClass}`}
             placeholder="Título del evento"
             name="title"
-            value={ formValues.title }
+            value={formValues.title}
             autoComplete="off"
-            onChange={ onInputChange }
+            onChange={onInputChange}
           />
           <small id="emailHelp" className="form-text text-muted">
             Una descripción corta
@@ -143,8 +148,8 @@ export const CalendarModal = () => {
             placeholder="Notas"
             rows="5"
             name="notes"
-            value={ formValues.notes }
-            onChange={ onInputChange }
+            value={formValues.notes}
+            onChange={onInputChange}
           ></textarea>
           <small id="emailHelp" className="form-text text-muted">
             Información adicional
