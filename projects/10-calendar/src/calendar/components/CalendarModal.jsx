@@ -5,7 +5,11 @@ import Modal from "react-modal";
 import DatePicker, { registerLocale ,  } from "react-datepicker";
 import es from 'date-fns/locale/es';
 
+import Swal from "sweetalert2";
+
+import 'sweetalert2/dist/sweetalert2.min.css'
 import "react-datepicker/dist/react-datepicker.css";
+
 
 registerLocale('es', es);
 
@@ -52,16 +56,20 @@ export const CalendarModal = () => {
     })
   }
 
-  const onSumbit = ( event ) => {
+  const onSubmit = ( event ) => {
     event.preventDefault();
 
     const diff = differenceInSeconds( formValues.end, formValues.start);
 
-    if( diff <= 0 || isNaN( diff ) ) return {...formValues,
-                                                errorMessage: 'Error en fechas.'
-                                            };
+    if( diff <= 0 || isNaN( diff ) ) {
+        Swal.fire('Fechas incorrectas','Revisar las fechas ingresadas' , 'error');
+        return;
+    }
 
-    if( formValues.title.length <= 0 ) return console.log('Error en titulo');
+    if( formValues.title.length <= 0 ) {
+        Swal.fire('Titulo incorrecto','El titulo debe contener al menos un caracter', 'error');
+        return;
+    }
 
     console.log(formValues);
 
@@ -79,7 +87,7 @@ export const CalendarModal = () => {
     >
       <h1> Nuevo evento </h1>
       <hr />
-      <form className="container" onSubmit={ onSumbit }>
+      <form className="container" onSubmit={ onSubmit }>
         <div className="form-group mb-2">
           <label>Fecha y hora inicio</label>
           <br />
