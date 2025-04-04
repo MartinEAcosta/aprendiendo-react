@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 
 
 export const useModal = () => {
-  const [isOpen, setIsOpen] = useState(true);
+
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const [formValues, setFormValues] = useState({
@@ -27,11 +27,6 @@ export const useModal = () => {
     });
   };
 
-  const onCloseModal = () => {
-    console.log("cerrando modal");
-    setIsOpen(false);
-  };
-
   const onDateChange = (event, changing) => {
     setFormValues({
       ...formValues,
@@ -42,13 +37,10 @@ export const useModal = () => {
   return {
     formSubmitted,
     ...formValues,
-    isOpen,
-    onCloseModal,
     onDateChange,
     onInputChange,
     setFormSubmitted,
     setFormValues,
-    setIsOpen,
     titleClass,
   }
 
