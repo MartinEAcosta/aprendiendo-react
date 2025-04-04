@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 
 export const useModal = () => {
   const [isOpen, setIsOpen] = useState(true);
-  const [formSumbitted, setFormSumbitted] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const [formValues, setFormValues] = useState({
     title: "Martin",
@@ -14,10 +14,10 @@ export const useModal = () => {
   });
 
   const titleClass = useMemo(() => {
-    if( !formSumbitted ) return '';
+    if( !formSubmitted ) return '';
 
     return (formValues.title.length > 0) ? '' : 'is-invalid';
-  }, [formSumbitted , formValues.title ]);
+  }, [formSubmitted , formValues.title ]);
 
 
   const onInputChange = ({ target }) => {
@@ -40,13 +40,13 @@ export const useModal = () => {
   };
 
   return {
-    formSumbitted,
+    formSubmitted,
     ...formValues,
     isOpen,
     onCloseModal,
     onDateChange,
     onInputChange,
-    setFormSumbitted,
+    setFormSubmitted,
     setFormValues,
     setIsOpen,
     titleClass,

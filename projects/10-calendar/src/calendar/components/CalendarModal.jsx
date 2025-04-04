@@ -29,15 +29,15 @@ Modal.setAppElement("#root");
 export const CalendarModal = () => {
 
     const { title , start , end , notes ,
-            formSumbitted , isOpen , onCloseModal,
-            onDateChange , onInputChange , setFormSumbitted ,
+            formSubmitted , isOpen , onCloseModal,
+            onDateChange , onInputChange , setFormSubmitted ,
             setFormValues , setIsOpen , titleClass
 
      } = useModal(); 
 
   const onSubmit = (event) => {
     event.preventDefault();
-    setFormSumbitted(true);
+    setFormSubmitted(true);
 
     const diff = differenceInSeconds(end, start);
 
