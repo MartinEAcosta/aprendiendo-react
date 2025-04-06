@@ -18,8 +18,9 @@ export const useCalendarStore = () => {
         // TODO: llegar al backend
         console.log(calendarEvent);
         if( calendarEvent._id ){
+            console.log(calendarEvent._id);
             //updating 
-            dispatch( onUpdateActiveEvent( { calendarEvent } ) );
+            dispatch( onUpdateActiveEvent( { ...calendarEvent } ) );
         }else{
             //creating
             dispatch( onAddNewEvent( { ...calendarEvent  , _id: new Date().getTime() } ) );
