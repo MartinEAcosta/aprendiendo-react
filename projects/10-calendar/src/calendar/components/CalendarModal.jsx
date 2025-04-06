@@ -11,7 +11,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useModal } from "../../hooks/useModal";
 import { useUiStore } from "../../hooks/useUiStore";
 import { useCalendarStore } from "../../hooks/useCalendarStore";
-import { useEffect } from "react";
 
 
 registerLocale('es', es);
@@ -32,7 +31,7 @@ Modal.setAppElement("#root");
 export const CalendarModal = () => {
 
     const { isDateModalOpen , closeDateModal } = useUiStore();
-    const { activeEvent } = useCalendarStore();
+    const { activeEvent , startSavingEvent } = useCalendarStore();
 
     const { 
             formSubmitted  , onCloseModal, formValues ,
@@ -41,21 +40,24 @@ export const CalendarModal = () => {
     } = useModal(); 
 
 
-  const onSubmit = (event) => {
+  const onSubmit = async(event) => {
     event.preventDefault();
     setFormSubmitted(true);
 
-    const diff = differenceInSeconds(activeEvent?.end, activeEvent?.start);
+    const diff = differenceInSeconds( formValues.end, formValues.start);
 
     if (diff <= 0 || isNaN(diff)) {
       Swal.fire("Fechas incorrectas", "Revisar las fechas ingresadas", "error");
       return;
     }
 
-    if (activeEvent?.title.length <= 0) {
+    if ( formValues.title.length <= 0) {
       return;
     }
 
+    await startSavingEvent( formValues );
+    closeDateModal();
+    setFormSubmitted(false);
     //TODO: SAVE DATA
     //TODO: CERRAR MODAL ;) 
   };
@@ -72,12 +74,11 @@ export const CalendarModal = () => {
     >
       <h1> Nuevo evento </h1>
       <hr />
-      <form className="container" onSubmit={onSubmit}>
+      <form className="container" onSubmit={ onSubmit }>
         <div className="form-group mb-2">
           <label>Fecha y hora inicio</label>
           <br />
           <DatePicker
-            minDate={ formValues.start }
             selected={ formValues.start }
             onChange={(event) => onDateChange(event, "start")}
             className="form-control"
@@ -92,7 +93,7 @@ export const CalendarModal = () => {
           <label>Fecha y hora fin</label>
           <br />
           <DatePicker
-            selected={ formValues.start }
+            selected={ formValues.end }
             onChange={(event) => onDateChange(event, "end")}
             className="form-control"
             dateFormat="Pp"

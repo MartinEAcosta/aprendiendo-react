@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { onSetActiveEvent } from "../store";
+import { onAddNewEvent, onSetActiveEvent, onUpdateActiveEvent } from "../store";
 
 
 export const useCalendarStore = () => {
@@ -11,9 +11,25 @@ export const useCalendarStore = () => {
         dispatch( onSetActiveEvent( calendarEvent ));
     }
 
+    // Al utilizar start refiere a que comenzará el proceso de grabación
+    // Por lo tanto se trata de una función que tranquilamente podria ir
+    // En un thunk. Es decir, es asincrona.
+    const startSavingEvent = async( calendarEvent ) => {
+        // TODO: llegar al backend
+        console.log(calendarEvent);
+        if( calendarEvent._id ){
+            //updating 
+            dispatch( onUpdateActiveEvent( { calendarEvent } ) );
+        }else{
+            //creating
+            dispatch( onAddNewEvent( { ...calendarEvent  , _id: new Date().getTime() } ) );
+        }
+    }
+
     return {
         events, activeEvent,
 
         setActiveEvent,
+        startSavingEvent,
     }
 }
