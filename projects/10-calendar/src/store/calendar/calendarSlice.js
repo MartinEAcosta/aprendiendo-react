@@ -24,6 +24,14 @@ export const calendarSlice = createSlice({
     reducers: {
         onSetActiveEvent: ( state , { payload }) => {
           state.activeEvent = payload;
+        },
+        onUpdateActiveEvent: ( state , { payload }) => {
+          state.activeEvent = null;
+          state.notes = state.notes.find( ( noteToUpdate ) => {
+            if( noteToUpdate != payload._id ) return noteToUpdate;
+
+            return payload;
+          })
         }
     }
 });
