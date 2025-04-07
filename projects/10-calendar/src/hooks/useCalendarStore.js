@@ -32,7 +32,7 @@ export const useCalendarStore = () => {
     }
 
     return {
-        events, activeEvent,
+        events, activeEvent, hasEventSelected: !!activeEvent,
 
         setActiveEvent,
         startSavingEvent,

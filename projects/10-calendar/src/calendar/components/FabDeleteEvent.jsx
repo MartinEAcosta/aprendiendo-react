@@ -4,9 +4,8 @@ import { useMemo } from "react";
 
 export const FabDeleteEvent = () => {
 
-    const { activeEvent , startDeletingEvent } = useCalendarStore();
+    const { activeEvent , startDeletingEvent , hasEventSelected } = useCalendarStore();
 
-    const isEventSelected = useMemo( () => activeEvent === null, [ activeEvent ]);
 
     const onClickDelete = (  ) => {
         if( activeEvent != null){
@@ -18,7 +17,7 @@ export const FabDeleteEvent = () => {
     <button 
         onClick={ onClickDelete }
         className="btn btn-danger fab-danger"
-        disabled={isEventSelected}
+        disabled={ !hasEventSelected }
     >
         <i className="fas fa-trash-alt"></i>
     </button>
