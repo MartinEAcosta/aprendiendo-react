@@ -8,7 +8,7 @@ export const FabDeleteEvent = () => {
 
     const isEventSelected = useMemo( () => activeEvent === null, [ activeEvent ]);
 
-    const onClickDelete = ( activeEvent ) => {
+    const onClickDelete = (  ) => {
         if( activeEvent != null){
             startDeletingEvent( {activeEvent} )
         }
@@ -16,7 +16,7 @@ export const FabDeleteEvent = () => {
 
   return (
     <button 
-        onClick={ () => onClickDelete( activeEvent ) }
+        onClick={ onClickDelete }
         className="btn btn-danger fab-danger"
         disabled={isEventSelected}
     >

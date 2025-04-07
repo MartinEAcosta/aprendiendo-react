@@ -27,8 +27,8 @@ export const useCalendarStore = () => {
         }
     }
 
-    const startDeletingEvent = async( calendarEvent ) => {
-        dispatch( onDeleteActiveEvent( { ...calendarEvent } ));
+    const startDeletingEvent = async(  ) => {
+        dispatch( onDeleteActiveEvent( ));
     }
 
     return {
