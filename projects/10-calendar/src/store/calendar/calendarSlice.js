@@ -35,10 +35,19 @@ export const calendarSlice = createSlice({
             const res = (eventToUpdate._id === payload._id) ? payload : eventToUpdate;
             return res;
           }); 
-        }
+        },
+        onDeleteActiveEvent: ( state , { payload } ) => {
+          console.log(payload)
+          state.events = state.events.map( (note) => {
+            if( note._id != payload._id) return;
+            
+            return note;
+          });
+          state.activeEvent = null;
+        },
     }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { onSetActiveEvent , onAddNewEvent , onUpdateActiveEvent } = calendarSlice.actions;
+export const { onSetActiveEvent , onAddNewEvent , onUpdateActiveEvent , onDeleteActiveEvent } = calendarSlice.actions;

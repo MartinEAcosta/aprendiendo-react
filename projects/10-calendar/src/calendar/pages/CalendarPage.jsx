@@ -3,7 +3,7 @@ import { Calendar } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 import { getMessagesES, localizer } from '../../helpers';
-import { Navbar , CalendarEvent, CalendarModal, FabAddNew } from "../";
+import { Navbar , CalendarEvent, CalendarModal, FabAddNew , FabDeleteEvent } from "../";
 import { useUiStore , useCalendarStore } from '../../hooks/';
 
 export const CalendarPage = () => {
@@ -65,6 +65,7 @@ export const CalendarPage = () => {
       />
 
       <FabAddNew />
+      <FabDeleteEvent />
 
       <CalendarModal />
     </>
