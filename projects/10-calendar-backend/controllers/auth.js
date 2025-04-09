@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const Usuario = require('../models/Usuario');
 const { generarJWT } = require('../helpers/jwt');
 
-
 const crearUsuario = async( req , res = response ) => {
 
     const { email , password } = req.body;
@@ -87,13 +86,16 @@ const loginUsuario = async( req , res = response ) => {
     }
 };
 
-const renovarToken = ( req , res  = response ) => {
+const renovarToken = async( req , res  = response ) => {
 
+    const { uid , name } = req;
+
+    const token = await generarJWT( uid , name );
 
     res.json({
         ok: true,
-        msg: 'reload token',
-    })
+        token
+    });
 };
 
 module.exports = {
