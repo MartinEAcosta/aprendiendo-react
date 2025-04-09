@@ -1,12 +1,23 @@
 const { response } = require('express');
-const Usuario  = require('../models/Usuario')
+const Usuario = require('../models/Usuario')
 
 
 const crearUsuario = async( req , res = response ) => {
+
+    const { email , password } = req.body;
+
     try{
-        // const { name , email , password } = req.body;
+        let usuario = await Usuario.findOne( { email } );
         
-        const usuario = new Usuario( req.body );
+        if( usuario ) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'El email asociado ya se encuentra registrado.'
+                
+            });
+        }
+
+        usuario = new Usuario( req.body );
 
         await usuario.save();
         
