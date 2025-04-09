@@ -1,6 +1,7 @@
 const { response } = require('express');
 const bcrypt = require('bcryptjs');
-const Usuario = require('../models/Usuario')
+const Usuario = require('../models/Usuario');
+const { generarJWT } = require('../helpers/jwt');
 
 
 const crearUsuario = async( req , res = response ) => {
@@ -14,7 +15,6 @@ const crearUsuario = async( req , res = response ) => {
             return res.status(400).json({
                 ok: false,
                 msg: 'El email asociado ya se encuentra registrado.'
-                
             });
         }
 
@@ -25,11 +25,16 @@ const crearUsuario = async( req , res = response ) => {
         usuario.password = bcrypt.hashSync( password , salt );
 
         await usuario.save();
-        
+
+        // Autentico con JWT
+
+        const token = await generarJWT( usuario.id , usuario.name );
+
         return res.status(201).json({
             ok: true,
             uid: usuario.id,
             name: usuario.name,
+            token,
         });
     }
     catch(error){
@@ -48,19 +53,22 @@ const loginUsuario = async( req , res = response ) => {
 
     try{
 
-        let usuario = await Usuario.findOne({ email });
+        const usuario = await Usuario.findOne({ email });
 
-        console.log(usuario);
         if ( usuario ){
 
             const isPasswordLegit = bcrypt.compareSync( password , usuario.password  );
 
             if( isPasswordLegit ){ 
+
+                const token = await generarJWT( usuario.id , usuario.name );
+
                 return res.status(200).json({
                     ok: true,
                     msg: 'Logeado con exito',
                     uid: usuario.id,
                     name: usuario.name,
+                    token,
                 });
             }
 
