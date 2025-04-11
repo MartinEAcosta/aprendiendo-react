@@ -22,6 +22,11 @@ const EventSchema = Schema({
         require: true,
     },
 
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'Usuario'
+    }
+
 });
 
 
