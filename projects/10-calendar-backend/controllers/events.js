@@ -3,12 +3,12 @@ const Event = require('../models/Event');
 
 const getEventos = async( req , res = response ) => {
     try{
-        const events = Event.find().all();
+        const events = await Event.find()
+                                        .populate('user','name');
 
         return res.status(200).json({
             ok: true,
-            events: events.obj,
-            msg: 'getEventos',
+            events,
         });
     }
     catch(error){

@@ -5,7 +5,7 @@ const EventSchema = Schema({
 
     title: {
         type: String,
-        require: true,
+        required: true,
     },
 
     notes: {
@@ -14,12 +14,12 @@ const EventSchema = Schema({
 
     start: {
         type: Date,
-        require: true,
+        required: true,
     },
 
     end: {
         type: Date,
-        require: true,
+        required: true,
     },
 
     user: {
@@ -29,6 +29,12 @@ const EventSchema = Schema({
 
 });
 
+EventSchema.method('toJSON' , function() {
+    const { _v, _id, ...object } = this.toObject();
+
+    object.id = _id;
+    return object
+});
 
 module.exports = model( 'Event' , EventSchema );
 
