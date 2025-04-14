@@ -52,7 +52,10 @@ const crearEvento = async( req = request , res = response ) => {
 
 const actualizarEvento = async( req = request , res = response ) => {
 
+    console.log(req);
+
     const { id } = req.params;
+    const uid = req.uid;
 
     const { title , notes , start , end ,user  } = req.body;
 
@@ -65,12 +68,19 @@ const actualizarEvento = async( req = request , res = response ) => {
                                                 );
 
         if( event ){
-            return res.status(200).json({
-                ok:true,
-                msg: `El evento con id: ${ id } ha sido actualizado con éxito.`,
-                event
-            });
+            if( event.user.toString() === uid ){
+                return res.status(200).json({
+                    ok:true,
+                    msg: `El evento con id: ${ id } ha sido actualizado con éxito.`,
+                    event
+                });
+            }
         }
+
+        return res.status(404).json({
+            ok: false,
+            msg: 'El evento solicitado a modifciar no ha sido encontrado o no estas autorizado para modificarlo.'
+        });
     }
     catch(error){
         console.log(error);
@@ -84,21 +94,28 @@ const actualizarEvento = async( req = request , res = response ) => {
 const eliminarEvento = async( req = request , res = response ) => {
 
     const { id } = req.params;
+    const uid = req.uid;
 
     try{
 
         let event = await Event.findOne({ _id: id });
 
         if( event ){
+            if( event.user.toString() === uid ){
+                await Event.deleteOne({ _id : id });
 
-            await Event.deleteOne({ _id : id });
-
-            return res.status(202).json({
-                ok: true,
-                msg: `El evento con id ${ id } fue eliminado.`,
-                event,
-            });
+                return res.status(202).json({
+                    ok: true,
+                    msg: `El evento con id ${ id } fue eliminado.`,
+                    event,
+                });
+            }
         }
+
+        return res.status(404).json({
+            ok: false,
+            msg: 'El evento que tratas de eliminar no te pertenece o no fue encontrado.',
+        });
     }
     catch(error){
         return res.status(500).json({
