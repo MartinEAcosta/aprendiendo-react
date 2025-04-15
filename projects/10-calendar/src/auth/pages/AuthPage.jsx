@@ -19,7 +19,7 @@ const registerFormFields = {
 
 export const AuthPage = () => {
 
-    const { startLogin , errorMessage } = useAuthStore( );
+    const { startLogin , startRegister , errorMessage } = useAuthStore( );
 
   const { loginEmail , loginPassword , formState:loginState , onInputChange:onLoginInputChange } = useForm( loginFormFields );
   const { registerEmail , registerName , registerPassword , registerPassword2 , formState:registerState , onInputChange:onRegisterInputChange } = useForm( registerFormFields );
@@ -35,6 +35,16 @@ export const AuthPage = () => {
 
   const registerSubmit = ( event ) => {
     event.preventDefault();
+  
+    if( registerName.length >= 2 && registerEmail && registerPassword && registerPassword2 ){
+        if( registerPassword !== registerPassword2 ){
+            Swal.fire("Error en el registro" , "Las contraseñas no coinciden." ,'error');
+            return;
+        }
+
+        startRegister( { name:registerName , email:registerEmail , password:registerPassword } );
+    }
+
 
     console.log(registerState);
   }
@@ -132,7 +142,8 @@ export const AuthPage = () => {
                             <input 
                                 type="submit" 
                                 className="btnSubmit" 
-                                value="Crear cuenta" />
+                                value="Crear cuenta"
+                                 />
                         </div>
                     </form>
                 </div>

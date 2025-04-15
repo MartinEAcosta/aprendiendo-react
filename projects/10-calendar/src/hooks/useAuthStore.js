@@ -32,10 +32,33 @@ export const useAuthStore = () => {
 
     }
 
+    const startRegister = async( { name , email , password } ) => {
+
+        dispatch( onChecking() );
+        try{
+
+            const { data , errorMessage } = await calendarApi.post('/auth/new' , { name , email , password } );
+            localStorage.setItem('name' , data.name);
+            localStorage.setItem('uid' , data.uid);
+
+            dispatch( onLogin( { name: data.name , uid: data.uid } ) );
+        }
+        catch(error){
+            dispatch( onLogout(  ) );
+
+            setTimeout(() =>{
+                dispatch( clearErrorMessage() );
+            }, 10);
+            console.log(error);
+
+        }
+    }
+
     return{
         status , user , errorMessage,
 
         startLogin,
+        startRegister,
 
     }
 }
