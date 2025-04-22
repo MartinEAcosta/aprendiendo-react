@@ -24,11 +24,12 @@ export const useCalendarStore = () => {
             console.log(calendarEvent._id);
             //updating 
             dispatch( onUpdateActiveEvent( { ...calendarEvent } ) );
-        }else{
+        }
+        else{
             //creating
-            const { data } = await calendarApi.post('/events');
-
-            dispatch( onAddNewEvent( { ...calendarEvent  , id: data.evento.id , user } ) );
+            const { data } = await calendarApi.post('/events' , calendarEvent ); 
+            console.log(data);
+            dispatch( onAddNewEvent( { ...calendarEvent  , id: data.savedEvent.id , user } ) );
         }
     }
 
