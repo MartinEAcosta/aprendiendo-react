@@ -75,7 +75,6 @@ export const CalendarModal = () => {
       <form className="container" onSubmit={ onSubmit }>
         <div className="form-group mb-2">
           <label>Fecha y hora inicio</label>
-          <br />
           <DatePicker
             selected={ formValues.start }
             onChange={(event) => onDateChange(event, "start")}
@@ -89,7 +88,6 @@ export const CalendarModal = () => {
 
         <div className="form-group mb-2">
           <label>Fecha y hora fin</label>
-          <br />
           <DatePicker
             selected={ formValues.end }
             onChange={(event) => onDateChange(event, "end")}

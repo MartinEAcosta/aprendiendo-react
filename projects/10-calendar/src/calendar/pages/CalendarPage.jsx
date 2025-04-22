@@ -8,14 +8,14 @@ import { useUiStore , useCalendarStore } from '../../hooks/';
 
 export const CalendarPage = () => {
   
-  const { events , setActiveEvent } = useCalendarStore();
+  const { events , setActiveEvent , startLoadingEvents } = useCalendarStore();
   const { openDateModal } = useUiStore();
 
   const [ lastView , setLastView ] = useState( localStorage.getItem('lastView') || 'week' );
 
   useEffect(() => {
-
-  }, [events])
+    startLoadingEvents();
+  }, []);
   
 
   const eventStyleGetter = ( event , start , end , isSelected ) => {
