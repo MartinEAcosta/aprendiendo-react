@@ -1,5 +1,4 @@
 import { useCalendarStore } from "../../hooks"
-import { useMemo } from "react";
 
 
 export const FabDeleteEvent = () => {
@@ -9,7 +8,7 @@ export const FabDeleteEvent = () => {
 
     const onClickDelete = (  ) => {
         if( activeEvent != null){
-            startDeletingEvent( {activeEvent} )
+            startDeletingEvent(  );
         }
     }
 
