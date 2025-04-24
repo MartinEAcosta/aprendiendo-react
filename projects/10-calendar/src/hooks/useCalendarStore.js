@@ -21,10 +21,15 @@ export const useCalendarStore = () => {
     const startSavingEvent = async( calendarEvent ) => {
         // TODO: llegar al backend
         console.log(calendarEvent);
-        if( calendarEvent._id ){
-            console.log(calendarEvent._id);
-            //updating 
-            dispatch( onUpdateActiveEvent( { ...calendarEvent } ) );
+        if( calendarEvent.id ){
+            if( !!activeEvent ){
+                if( activeEvent.user._id  === user.uid ){
+                    
+                    await calendarApi.put(`/events/${ activeEvent.id }`, calendarEvent);
+
+                    dispatch( onUpdateActiveEvent(  calendarEvent  ) );
+                }
+            }
         }
         else{
             //creating
@@ -40,8 +45,11 @@ export const useCalendarStore = () => {
             if( !!activeEvent ){
                 
                 if( activeEvent.user._id  === user.uid ){
-                    const { data } = await calendarApi.delete(`/events/${activeEvent.id}`);
+                    await calendarApi.delete(`/events/${activeEvent.id}`);
                     dispatch( onDeleteActiveEvent( ) );
+                }
+                else{
+                    throw new Error('El evento que intentas eliminar no es de tu pertenencia.');
                 }
             }
         }
@@ -50,7 +58,7 @@ export const useCalendarStore = () => {
         }
     }
 
-    const startLoadingEvents = async() =>{
+    const startLoadingEvents = async( ) => {
         try{
 
             const { data } = await calendarApi.get('/events');
@@ -61,7 +69,6 @@ export const useCalendarStore = () => {
             console.log(error);
         }
     }
-
 
     return {
         events, activeEvent, hasEventSelected: !!activeEvent,
