@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { onAddNewEvent, onDeleteActiveEvent, onSetActiveEvent, onSetEvents, onUpdateActiveEvent } from "../store";
 import calendarApi from "../api/calendarApi";
 import { convertEventsToDateEvents } from "../helpers";
+import Swal from "sweetalert2";
 
 
 export const useCalendarStore = () => {
@@ -19,23 +20,23 @@ export const useCalendarStore = () => {
     // Por lo tanto se trata de una función que tranquilamente podria ir
     // En un thunk. Es decir, es asincrona.
     const startSavingEvent = async( calendarEvent ) => {
-        // TODO: llegar al backend
-        console.log(calendarEvent);
-        if( calendarEvent.id ){
-            if( !!activeEvent ){
-                if( activeEvent.user._id  === user.uid ){
-                    
-                    await calendarApi.put(`/events/${ activeEvent.id }`, calendarEvent);
 
-                    dispatch( onUpdateActiveEvent(  calendarEvent  ) );
+        try{
+            if( calendarEvent.id ){
+                if( !!activeEvent ){
+                    await calendarApi.put(`/events/${ activeEvent.id }`, calendarEvent);
+                    
+                    dispatch( onUpdateActiveEvent(  {...calendarEvent , user}  ) );
                 }
+                return;
+            }   
+            else{
+                const { data } = await calendarApi.post('/events' , calendarEvent ); 
+                dispatch( onAddNewEvent( { ...calendarEvent  , id: data.savedEvent.id , user } ) );
             }
         }
-        else{
-            //creating
-            const { data } = await calendarApi.post('/events' , calendarEvent ); 
-            console.log(data);
-            dispatch( onAddNewEvent( { ...calendarEvent  , id: data.savedEvent.id , user } ) );
+        catch(error){
+            Swal.fire('Error al guardar.' , error.response.data.msg , 'error');
         }
     }
 
@@ -43,7 +44,6 @@ export const useCalendarStore = () => {
         try{
             
             if( !!activeEvent ){
-                
                 if( activeEvent.user._id  === user.uid ){
                     await calendarApi.delete(`/events/${activeEvent.id}`);
                     dispatch( onDeleteActiveEvent( ) );
